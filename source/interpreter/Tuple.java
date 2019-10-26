@@ -1,4 +1,4 @@
-package lisp;
+package interpreter;
 
 public class Tuple implements List {
     /* package_private */ Tuple(S car, S cdr) {
@@ -23,7 +23,7 @@ public class Tuple implements List {
     @Override
     public String toString() {
         if (cdr instanceof Tuple && cdr.cdr() == NIL) {
-            if (car == Lisp.QUOTE) return "'" + cdr.car();
+            if (car == Interpreter.QUOTE) return "'" + cdr.car();
         }
         StringBuilder sb = new StringBuilder();
         sb.append("(").append(car);

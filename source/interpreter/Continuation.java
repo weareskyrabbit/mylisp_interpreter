@@ -1,4 +1,4 @@
-package lisp;
+package interpreter;
 
 public class Continuation implements Procedure {
     /* package-private */ Continuation(Continue cont) {

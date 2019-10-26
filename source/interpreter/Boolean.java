@@ -1,4 +1,4 @@
-package lisp;
+package interpreter;
 
 /* package-private */ class Boolean implements S {
     private Boolean(boolean value) {

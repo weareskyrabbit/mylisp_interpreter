@@ -1,11 +1,9 @@
-package lisp;
+package interpreter;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Lisp {
-    private Lisp() {}
+public class Interpreter {
+    private Interpreter() {}
 
     /* package-private */ static final Symbol QUOTE = Symbol.of("quote");
     /* package-private */ static final Symbol LAMBDA = Symbol.of("lambda");
@@ -139,17 +137,9 @@ public class Lisp {
     // static S read(String s) {
     //     return new Scanner(new StringReader(s)).read();
     // }
-
-    public static void main(String[] args) throws IOException {
+    public static void interpret(Scanner scanner) {
         boolean redirect = System.console() == null;
         String prompt = "> ";
-        Scanner scanner = null;
-        if (args.length > 1) {
-            System.out.println("Usage: java Lisp [file]");
-            System.exit(1);
-        } else if (args.length == 1) {
-            scanner = new Scanner(new InputStreamReader(new FileInputStream(args[0])));
-        }
         while (true) {
             if (!redirect) {
                 System.out.print(prompt);

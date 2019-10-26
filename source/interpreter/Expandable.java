@@ -1,4 +1,4 @@
-package lisp;
+package interpreter;
 
 public interface Expandable extends Applicable {
     /* public */ S expand(S args);

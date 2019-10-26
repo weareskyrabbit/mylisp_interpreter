@@ -1,4 +1,4 @@
-package lisp;
+package interpreter;
 
 public interface List extends S {
     /* public static final */ List NIL = new List() {

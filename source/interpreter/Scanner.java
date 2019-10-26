@@ -1,11 +1,11 @@
-package lisp;
+package interpreter;
 
-import static lisp.Lisp.*;
+import static interpreter.Interpreter.*;
 
 import java.io.IOException;
 
-/* package-private */ class Scanner {
-    /* package-private */ Scanner(java.io.Reader reader) {
+public class Scanner {
+    public Scanner(java.io.Reader reader) {
         this.reader = reader;
         get();
     }

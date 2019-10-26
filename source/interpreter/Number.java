@@ -1,4 +1,4 @@
-package lisp;
+package interpreter;
 
 public class Number implements S, Comparable<Number> {
     private Number(int value) {

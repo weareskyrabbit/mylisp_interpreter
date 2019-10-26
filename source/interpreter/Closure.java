@@ -1,6 +1,6 @@
-package lisp;
+package interpreter;
 
-import static lisp.Lisp.*;
+import static interpreter.Interpreter.*;
 
 public class Closure implements Procedure {
 

@@ -1,4 +1,4 @@
-package lisp;
+package interpreter;
 
 public interface Applicable extends S {
     @Override
