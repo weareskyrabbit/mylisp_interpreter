@@ -137,25 +137,10 @@ public class Interpreter {
     // static S read(String s) {
     //     return new Scanner(new StringReader(s)).read();
     // }
-    public static void interpret(Scanner scanner) {
-        boolean redirect = System.console() == null;
-        String prompt = "> ";
-        while (true) {
-            if (!redirect) {
-                System.out.print(prompt);
-                System.out.flush();
-            }
-            if (scanner == null)
-                scanner = new Scanner(new InputStreamReader(System.in));
-            try {
-                S input = scanner.read();
-                if (input == Scanner.EOF_OBJECT || input == Symbol.of("quit"))
-                    break;
-                S evaled = eval(input);
-                System.out.println(evaled);
-            } catch (Exception e) {
-                System.err.println("Error: " + e.getMessage());
-            }
-        }
+    public static void interpret(InputStreamReader reader) {
+        S input = new Scanner(reader).read();
+        if (input == Scanner.EOF_OBJECT || input == Symbol.of("quit")) System.exit(0);
+        S evaled = eval(input);
+        System.out.println(evaled);
     }
 }
