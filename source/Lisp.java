@@ -22,15 +22,14 @@ public class Lisp {
             }
         } else if (args.length == 1) {
             // interpreter mode
-            reader = new InputStreamReader(new FileInputStream(args[0]));
+            reader = new InputStreamReader(new FileInputStream(args[0] + ".lisp"));
             while (true) {
                 Interpreter.interpret(reader);
             }
         } else {
             for (String path : args) {
                 // compiler mode
-                reader = new InputStreamReader(new FileInputStream(path));
-                Compiler.compile(reader);
+                Compiler.compile(path);
             }
         }
     }
