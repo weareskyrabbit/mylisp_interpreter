@@ -7,6 +7,6 @@ public class ParsingException extends Exception {
     }
     @Override
     public String toString() {
-        return "ParsingException:" + message;
+        return message;
     }
 }

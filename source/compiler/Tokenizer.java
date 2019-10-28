@@ -10,7 +10,7 @@ public class Tokenizer {
     private char[] input;
     private int position;
     private int line;
-    private int offset; // TODO
+    private int offset;
     private Map<String, Word> words;
     private TokenizerState state;
 
@@ -43,72 +43,72 @@ public class Tokenizer {
                     if (input[position] == '\n') {
                         line++; offset = 0;
                     }
-                    position++;
+                    position++; offset++;
                 }
                 switch (input[position]) {
                     case '&':
-                        position++;
+                        position++; offset++;
                         if (input[position] == '&') {
-                            position++;
+                            position++; offset++;
                             return Word.and; // &&
                         } else {
                             return new Token(line, offset, '&');
                         }
                     case '|':
-                        position++;
+                        position++; offset++;
                         if (input[position] == '|') {
-                            position++;
+                            position++; offset++;
                             return Word.or; // ||
                         } else {
                             return new Token(line, offset, '|');
                         }
                     case '=':
-                        position++;
+                        position++; offset++;
                         if (input[position] == '=') {
-                            position++;
+                            position++; offset++;
                             return Word.eq; // ==
                         } else {
                             return new Token(line, offset, '=');
                         }
                     case '!':
-                        position++;
+                        position++; offset++;
                         if (input[position] == '=') {
-                            position++;
+                            position++; offset++;
                             return Word.ne; // !=
                         } else {
                             return new Token(line, offset, '!');
                         }
                     case '<':
-                        position++;
+                        position++; offset++;
                         if (input[position] == '=') {
-                            position++;
+                            position++; offset++;
                             return Word.le; // <=
                         } else {
                             return new Token(line, offset, '<');
                         }
                     case '>':
-                        position++;
+                        position++; offset++;
                         if (input[position] == '=') {
-                            position++;
+                            position++; offset++;
                             return Word.ge; // >=
                         } else {
                             return new Token(line, offset, '>');
                         }
                     case '/':
-                        position++;
+                        position++; offset++;
                         if (input[position] == '/') {
-                            position++;
+                            position++; offset++;
                             state = TokenizerState.SHORT_COMMENT;
                             return tokenize();
                         } else if (input[position] == '*') {
-                            position++;
+                            position++; offset++;
                             state = TokenizerState.LONG_COMMENT;
                             return tokenize();
                         } else {
                             return new Token(line, offset, '/');
                         }
                     case '\"':
-                        position++;
+                        position++; offset++;
                         state = TokenizerState.STRING;
                         return tokenize();
                 }
@@ -116,7 +116,7 @@ public class Tokenizer {
                     int int_value = 0;
                     do {
                         int_value = 10 * int_value + Character.digit(input[position], 10);
-                        position++;
+                        position++; offset++;
                     } while (Character.isDigit(input[position]));
                     if (input[position] != '.') {
                         return new Number(line, offset, int_value);
@@ -124,7 +124,7 @@ public class Tokenizer {
 
                     float float_value = int_value;
                     for (int i = 0; ; i++) {
-                        position++;
+                        position++; offset++;
                         if (!Character.isDigit(input[position])) break;
                         float_value += Character.digit(input[position], 10) / Math.pow(10, i + 1);
                     }
@@ -133,7 +133,7 @@ public class Tokenizer {
                     StringBuilder builder = new StringBuilder();
                     do {
                         builder.append(input[position]);
-                        position++;
+                        position++; offset++;
                     } while (Character.isLetterOrDigit(input[position]));
                     String lexeme = builder.toString();
                     if (words.containsKey(lexeme)) {
@@ -144,7 +144,7 @@ public class Tokenizer {
                     return word;
                 } else {
                     Token token = new Token(line, offset, input[position]);
-                    position++;
+                    position++; offset++;
                     return token;
                 }
             case STRING:
@@ -154,17 +154,17 @@ public class Tokenizer {
                     if (input[position] == '\n') {
                         line++; offset = 0;
                     }
-                    position++;
+                    position++; offset++;
                 }
-                position++;
+                position++; offset++;
                 state = TokenizerState.STANDARD;
                 return new String_(line, offset, builder.toString());
             case SHORT_COMMENT:
                 while (input[position] != '\n') {
-                    position++;
+                    position++; offset++;
                 }
                 line++; offset = 0;
-                position++;
+                position++; offset++;
                 state = TokenizerState.STANDARD;
                 return tokenize();
             case LONG_COMMENT:
@@ -172,9 +172,9 @@ public class Tokenizer {
                     if (input[position] == '\n') {
                         line++; offset = 0;
                     }
-                    position++;
+                    position++; offset++;
                 }
-                position += 2;
+                position += 2; offset += 2;
                 state = TokenizerState.STANDARD;
                 return tokenize();
         }
