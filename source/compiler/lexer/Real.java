@@ -1,11 +1,14 @@
-package compiler.token;
+package compiler.lexer;
 
 public class Real extends Token {
+    /* member variables */
     public final float value;
-    public Real(int line, int offset, float value) {
-        super(line, offset, Tag.REAL);
+    /* constructors */
+    public Real(float value) {
+        super(Tag.REAL);
         this.value = value;
     }
+    /* member functions */
     @Override
     public String toString() {
         return "" + value;
