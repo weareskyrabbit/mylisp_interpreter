@@ -1,4 +1,4 @@
-package ast;
+package compiler.ast;
 
 public class Nil implements S {
     @Override

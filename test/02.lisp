@@ -1,9 +1,9 @@
-(define leaf-count/cps
+(define leafCountCps
     (lambda (tree cont)
-        (if (pair? tree)
-            (leaf-count/cps (car tree)
+        (if (isPair tree)
+            (leafCountCps (car tree)
                 (lambda (n)
-                    (leaf-count/cps (cdr tree)
-                        (lambda (m) (cont (+ n m))))))
+                    (leafCountCps (cdr tree)
+                        (lambda (m) (cont (add n m))))))
             (cont 1))))
-(leaf-count/cps '((a . b) (c . d) . e) display)
+(leafCountCps (quote ((a . b) ((c . d) . e))) display)

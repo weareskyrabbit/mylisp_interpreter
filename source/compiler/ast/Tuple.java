@@ -1,4 +1,4 @@
-package ast;
+package compiler.ast;
 
 public class Tuple implements S {
     /* package-private */ S car, cdr;
