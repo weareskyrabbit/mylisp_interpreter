@@ -1,6 +1,8 @@
 package compiler.token;
 
 import compiler.ast.S;
+import compiler.ir.Immediate;
+import compiler.ir.Push;
 
 /* example: 100, -50 */
 public class NumberLiteral extends Token implements S {
@@ -15,5 +17,9 @@ public class NumberLiteral extends Token implements S {
     @Override
     public String toString() {
         return String.format("Number(%d)", value);
+    }
+    @Override
+    public Push evaluate() {
+        return new Push(new Immediate<>(value));
     }
 }

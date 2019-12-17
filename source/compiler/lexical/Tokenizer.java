@@ -57,7 +57,7 @@ public class Tokenizer {
             rules.setRule(new Rule<>(LexicalState.WHITESPACE, c, LexicalState.WHITESPACE));
             rules.setRule(new Rule<>(LexicalState.SYMBOL, c,LexicalState.WHITESPACE) {
                 @Override public State next() {
-                    tokens.add(new Symbol(builder.toString()));
+                    tokens.add(new Identifier(builder.toString()));
                     builder.delete(0, builder.length());
                     return super.next(); }
             });
@@ -141,7 +141,7 @@ public class Tokenizer {
             rules.setRule(new Rule<>(LexicalState.SYMBOL, c, LexicalState.WHITESPACE) {
                 @Override
                 public State next() {
-                    tokens.add(new Symbol(builder.toString()));
+                    tokens.add(new Identifier(builder.toString()));
                     builder.delete(0, builder.length());
                     tokens.add(new Token(c));
                     return super.next();

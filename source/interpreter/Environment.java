@@ -30,6 +30,6 @@ public class Environment {
         for (Environment e = environment; e != null; e = e.next)
             if (e.map.containsKey(key))
                 return e;
-        throw new RuntimeException("Variable " + key + " not found");
+        throw new RuntimeException("Symbol " + key + " not found");
     }
 }

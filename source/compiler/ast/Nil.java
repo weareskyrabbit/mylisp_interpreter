@@ -5,4 +5,8 @@ public class Nil implements S {
     public String toString() {
         return "()";
     }
+    @Override
+    public Symbol evaluate() {
+        return null;
+    }
 }

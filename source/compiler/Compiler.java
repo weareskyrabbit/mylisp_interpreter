@@ -2,8 +2,9 @@ package compiler;
 
 import compiler.ast.S;
 import compiler.lexical.Tokenizer;
+import compiler.semantic.SemanticException;
 import compiler.syntax.Parser;
-import compiler.syntax.ParsingException;
+import compiler.syntax.SyntaxException;
 import compiler.token.Token;
 
 import java.io.IOException;
@@ -11,13 +12,20 @@ import java.io.IOException;
 public class Compiler {
     public static void compile(String  path) throws IOException {
         Token[] tokens = new Tokenizer().tokenize(path);
+        S[] result = null;
         try {
-            S[] result = new Parser().parse(tokens);
-            for (S s: result) {
-                System.out.println(s);
-            }
-        } catch (ParsingException e) {
+            result = new Parser().parse(tokens);
+        } catch (SyntaxException e) {
             e.printStackTrace();
+            System.exit(1);
+        }
+        try {
+            for (S s: result) {
+                System.out.println(s.evaluate());
+            }
+        } catch (SemanticException e) {
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 }
