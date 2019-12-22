@@ -2,3 +2,4 @@
 .vscode/
 built/
 lib/
+cmake-build-debug/
