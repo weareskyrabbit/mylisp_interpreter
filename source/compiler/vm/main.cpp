@@ -3,14 +3,14 @@
 
 #include <vector>
 
-#ifdef __GNUC__
-immediate sub(immediate a) {
-    immediate __lambda_expression__ (immediate b) {
-        return new immediate(a - b.i);
-    }
-    return new immediate(__lambda_expression__);
-}
-#endif
+//#ifdef __GNUC__
+//immediate sub(immediate a) {
+//    immediate __lambda_expression__ (immediate b) {
+//        return new immediate(a - b.i);
+//    }
+//    return new immediate(__lambda_expression__);
+//}
+//#endif
 
 int main() {
 	auto vm = new VirtualMachine();
@@ -33,8 +33,32 @@ int main() {
 	tmp2.push_back(0x31000000u); // bor
 	tmp2.push_back(0x32000000u); // bnot
 	tmp2.push_back(0x38000000u); // bout
+	// class Test {
+	//     int i;
+	//     void f() { i = 2; }
+	//     Test(int j) { i = j; f(); }
+	// }
+	// new Test(1);
+    auto tmp3 = vector<uint32_t>();
+    tmp3.push_back(0x00000001u); // field_count: 1
+	tmp3.push_back(0x00000001u); // method_count: 1
+	tmp3.push_back(0x00000004u); // function_size: 4
+    tmp3.push_back(0x11020000u); // ipush 2
+    tmp3.push_back(0x4c000000u); // self
+    tmp3.push_back(0x46000000u); // setd  0
+    tmp3.push_back(0x16000000u); // ret
+    tmp3.push_back(0x00000001u); // constructor_count: 1
+    tmp3.push_back(0x00000005u); // constructor_size: 5
+    tmp3.push_back(0x4c000000u); // self
+    tmp3.push_back(0x46000000u); // setd  0 TODO
+    tmp3.push_back(0x49000000u); // calld 0
+    tmp3.push_back(0x4c000000u); // self
+    tmp3.push_back(0x16000000u); // ret
+    // TODO
+    tmp2.push_back(0x11010000u); // ipush 1
+    tmp2.push_back(0x40000000u); // new   0 0
 
-    vm->load((uint8_t*) "Hello, World!", 15, &tmp2.front());
+    vm->load((uint8_t*) "Hello, World!", 17, &tmp2.front(), &tmp3.front());
     // pop null
     // invoke=call
     // new setf getf sets gets ineg

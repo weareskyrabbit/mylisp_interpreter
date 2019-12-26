@@ -1,16 +1,24 @@
-#ifndef LISP_LISP
-#define LISP_LISP
+#ifndef LISP_LISP_H
+#define LISP_LISP_H
 
 #include <iomanip>
 #include <cstdint>
+#include <vector>
 
 using namespace std;
+
+union immediate;
+struct instruction;
+struct function;
+struct Class_;
+struct Object_;
 
 union immediate {
     uint32_t i;
     bool b;
     uint8_t* s;
     immediate (*f)(immediate);
+    Object_* r;
     /*
      * void(*p)(immediate);
      * immediate (*c)();
@@ -19,6 +27,7 @@ union immediate {
     immediate(bool b)                    { this->b = b; }
     immediate(uint8_t* s)                { this->s = s; }
     immediate(immediate (*f)(immediate)) { this->f = f; }
+    immediate(Object_* r)                { this->r = r; }
     /*
      * immediate(void (*p)(immediate))      { this->p = p; }
      * immediate(immediate (*c)())          { this->c = c; }
@@ -29,17 +38,22 @@ struct instruction {
     uint8_t operand0;
     uint8_t operand1;
     uint8_t operand2;
-    instruction(uint32_t i) {
-        this->operand2 = i & 0xffu;
-        this->operand1 = i >> 8u & 0xffu;
-        this->operand0 = i >> 16u & 0xffu;
-        this->type = i >> 24u;
-    }
 };
-class Object_ {
-public:
+struct function {
+    instruction* body;
+    instruction* ret;
+    function(instruction* body) { this->body = body; }
+};
+struct Class_ {
+    immediate* constant_pool;
     immediate* fields;
-    immediate* methods;
+    function* methods;
+    function* constructors;
 };
 
-#endif
+struct Object_ {
+    immediate* fields;
+    function* methods;
+};
+
+#endif // LISP_LISP_H

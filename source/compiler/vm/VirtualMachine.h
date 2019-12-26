@@ -4,7 +4,6 @@
 #include "lisp.h"
 
 #include <iostream>
-#include <vector>
 
 class VirtualMachine {
 public:
@@ -12,13 +11,15 @@ public:
 		runtime_stack.clear();
 		self = nullptr;
 	}
-	void load(uint8_t*, uint32_t, uint32_t*);
-	vector<instruction> execute(instruction*);
+	void load(uint8_t*, uint32_t, uint32_t*, uint32_t*);
+	vector<instruction> execute();
 private:
+    Class_* classes;
 	const immediate* constant_pool;
     vector<immediate> runtime_stack;
     immediate* locals; // TODO
     Object_* self;
+    vector<function> stack;
 	void push(immediate);
 	immediate pop();
 };
