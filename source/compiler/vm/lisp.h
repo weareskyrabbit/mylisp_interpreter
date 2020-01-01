@@ -46,7 +46,8 @@ struct function {
 };
 struct Class_ {
     immediate* constant_pool;
-    immediate* fields;
+    uint32_t field_count;
+    uint32_t method_count;
     function* methods;
     function* constructors;
 };

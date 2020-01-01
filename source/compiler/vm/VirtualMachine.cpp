@@ -8,32 +8,6 @@ immediate VirtualMachine::pop() {
 	runtime_stack.pop_back();
 	return tmp;
 }
-void VirtualMachine::load(uint8_t* cp, uint32_t count, uint32_t* i, uint32_t* c) {
-    // TODO
-    this->constant_pool = new immediate(cp);
-    auto tmp1 = vector<instruction>();
-    for (uint32_t u = 0u; u < count; u++) {
-        tmp1.push_back(*new instruction(i[u]));
-    }
-    classes = new Class_;
-    classes->fields = (immediate*) malloc(*c * sizeof(immediate)); c++;
-    classes->methods = (function*) malloc(*c * sizeof(function)); c++;
-    auto function_size = *c; c++;
-    auto tmp2 = vector<instruction>();
-    for (uint32_t u = 0; u < function_size; u++) {
-        tmp2.push_back(*new instruction(c[u])); c++;
-    }
-    classes->methods = new function(&tmp2.front());
-    classes->constructors = (function*) malloc(*c * sizeof(function)); c++;
-    function_size = *c; c++;
-    tmp2.clear();
-    for (uint32_t u = 0; u < function_size; u++) {
-        tmp2.push_back(*new instruction(c[u])); c++;
-    }
-    classes->constructors = new function(&tmp2.front());
-    stack.push_back(*new function(&tmp1.front()));
-    execute();
-}
 vector<instruction> VirtualMachine::execute() {
 // direct threading
 #if defined __GNUC__ || defined __clnag__ || defined __INTEL_COMPILER
@@ -54,7 +28,7 @@ vector<instruction> VirtualMachine::execute() {
   #define END_DISPATCH }}
 #endif
    instruction* pc = stack.back().body;
-   instruction i = *new instruction(0u);
+   instruction i = *new instruction;
 #ifdef DIRECT_THREADED
    static void* table[] = {
        /* 00 */ &&L_NOP,   /* 01 */ &&L_EXIT,  /* 02 */ &&L_DEBUG,  /* 03 */ &&L_NOP,
@@ -78,8 +52,8 @@ vector<instruction> VirtualMachine::execute() {
        /* 3c */ &&L_TRUE,  /* 3d */ &&L_FALSE, /* 3e */ &&L_NOP,    /* 3f */ &&L_NOP,
 
        /* 40 */ &&L_NEW,   /* 41 */ &&L_NOP,   /* 42 */ &&L_NOP,    /* 43 */ &&L_NOP,
-       /* 44 */ &&L_SETS,  /* 45 */ &&L_GETS,  /* 46 */ &&L_SETD,   /* 47 */ &&L_GETD,
-       /* 48 */ &&L_CALLS, /* 49 */ &&L_CALLD, /* 4a */ &&L_NOP,    /* 4b */ &&L_NOP,
+       /* 44 */ &&L_NOP,   /* 45 */ &&L_NOP,   /* 46 */ &&L_SETD,   /* 47 */ &&L_GETD,
+       /* 48 */ &&L_NOP,   /* 49 */ &&L_CALLD, /* 4a */ &&L_NOP,    /* 4b */ &&L_NOP,
        /* 4c */ &&L_SELF,  /* 4d */ &&L_NOP,   /* 4e */ &&L_NOP,    /* 4f */ &&L_NOP,
    };
 #endif
@@ -225,16 +199,6 @@ vector<instruction> VirtualMachine::execute() {
             pc = right.body;
             stack.push_back(right);
         } JUMP;
-        CASE(SETS) {
-            Class_ left = classes[pc->operand0];
-            immediate right = pop();
-            left.sfields[pc->operand1] = right;
-        } NEXT;
-        CASE(GETS) {
-            Class_ left = classes[pc->operand0];
-            immediate right = left.sfields[pc->operand1];
-            push(right);
-        } NEXT;
         CASE(SETD) {
             immediate left = pop();
             immediate right = pop();
@@ -245,13 +209,6 @@ vector<instruction> VirtualMachine::execute() {
             immediate right = left.r->fields[pc->operand0];
             push(right);
         } NEXT;
-        CASE(CALLS) {
-            Class_ left = classes[pc->operand0];
-            function right = left.smethods[pc->operand1];
-            stack.back().ret = pc;
-            pc = right.body;
-            stack.push_back(right);
-        } JUMP;
         CASE(CALLD) {
             immediate left = pop();
             function right = left.r->methods[pc->operand0];

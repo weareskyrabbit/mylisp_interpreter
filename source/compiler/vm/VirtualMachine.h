@@ -1,18 +1,22 @@
-#ifndef LISP_VIRTUALMACHINE
-#define LISP_VIRTUALMACHINE
+#ifndef LISP_VIRTUALMACHINE_H
+#define LISP_VIRTUALMACHINE_H
 
 #include "lisp.h"
+#include "Converter.h"
 
 #include <iostream>
 
 class VirtualMachine {
 public:
 	VirtualMachine() {
+	    auto tmp = vector<Class_>();
+	    converter = new Converter(tmp);
+	    classes = &tmp.front();
 		runtime_stack.clear();
 		self = nullptr;
 	}
-	void load(uint8_t*, uint32_t, uint32_t*, uint32_t*);
 	vector<instruction> execute();
+    Converter* converter; // TODO
 private:
     Class_* classes;
 	const immediate* constant_pool;
